@@ -44,8 +44,8 @@ func FromJson(data []byte) (*Config, error) {
 }
 
 /* Write a Config to a File */
-func (c *Config) WriteFile(path string) {
-	ioutil.WriteFile(path, c.ToJson(), 0111)
+func (c *Config) WriteFile(path string) error {
+	return ioutil.WriteFile(path, c.ToJson(), 0555)
 }
 
 /* Read a Config from a File */
