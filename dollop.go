@@ -9,19 +9,24 @@ import (
 
 /* General structure of our configuration */
 type Config struct {
-	CertFile string
-	ListenOn []string
-	HostMap  map[string]string
+	HostCertMap     map[string]string
+	HostEndpointMap map[string]Endpoint
+}
+
+/* Endpoint to connect to for a given domain name suffix */
+type Endpoint struct {
+	Addr string
+	Port string
 }
 
 /* Function to produce an empty config map */
 func emptyConfig() Config {
-	hostMap := make(map[string]string)
-	hostMap["127.0.0.1:80"] = "127.0.0.1:8080"
+	hostEndpointMap := make(map[string]Endpoint)
+	hostEndpointMap["example.com"] = Endpoint{Addr: "127.0.0.1", Port: "8080"}
 	return Config{
-		CertFile: "./that.cert",
-		ListenOn: []string{"0.0.0.0:80", "0.0.0.0:443"},
-		HostMap:  hostMap}
+		HostCertMap:     map[string]string{"example.com": "./this.cert"},
+		HostEndpointMap: hostEndpointMap,
+	}
 }
 
 /*
@@ -46,12 +51,13 @@ func main() {
 		fmt.Printf("%s\n", json)
 		os.Exit(0)
 	}
-	//Normal performance, start by reading+parsing the config:
+	//Reading config file:
 	data, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
 	}
+	//Parsing config file:
 	var config Config
 	err = json.Unmarshal(data, &config)
 	if err != nil {
@@ -59,5 +65,6 @@ func main() {
 		os.Exit(3)
 	}
 	fmt.Println("Successfully parsed config.")
-	fmt.Printf("%+v\n", config)
+	//Starting up:
+	//FIXME IMPLEMENT .)
 }
