@@ -29,30 +29,30 @@ func EmptyConfig() Config {
 
 /* Serialize a Config to a []byte as json */
 func (c *Config) ToJson() []byte {
-  data, _ := json.MarshalIndent(c, "", "  ")
-  return data
+	data, _ := json.MarshalIndent(c, "", "  ")
+	return data
 }
 
 /* Parse a Config from a []byte as json */
 func FromJson(data []byte) (*Config, error) {
-  var config Config
-  err := json.Unmarshal(data, &config)
-  if err != nil {
-    return nil, err
-  }
-  return &config, nil
+	var config Config
+	err := json.Unmarshal(data, &config)
+	if err != nil {
+		return nil, err
+	}
+	return &config, nil
 }
 
 /* Write a Config to a File */
 func (c *Config) WriteFile(path string) {
-  ioutil.WriteFile(path, c.ToJson(), 0111)
+	ioutil.WriteFile(path, c.ToJson(), 0111)
 }
 
 /* Read a Config from a File */
 func ReadFile(path string) (*Config, error) {
-  data, err := ioutil.ReadFile(path)
-  if err != nil {
-    return nil, err
-  }
-  return FromJson(data)
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return FromJson(data)
 }

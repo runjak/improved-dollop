@@ -1,8 +1,8 @@
 package main
 
 import (
-  "./config"
 	"fmt"
+	"github.com/runjak/improved-dollop/config"
 	"os"
 )
 
@@ -23,12 +23,12 @@ func main() {
 	}
 	//Checking if init case is wanted:
 	if os.Args[1] == "init" {
-    c := config.EmptyConfig()
+		c := config.EmptyConfig()
 		fmt.Printf("%s\n", c.ToJson())
 		os.Exit(0)
 	}
 	//Reading config file:
-  config, err := config.ReadFile(os.Args[1])
+	config, err := config.ReadFile(os.Args[1])
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
