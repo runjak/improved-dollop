@@ -18,10 +18,10 @@ type Endpoint struct {
 }
 
 /* Function to produce an empty config map */
-func EmptyConfig() Config {
+func EmptyConfig() *Config {
 	hostEndpointMap := make(map[string]Endpoint)
 	hostEndpointMap["example.com"] = Endpoint{Addr: "127.0.0.1", Port: "8080"}
-	return Config{
+	return &Config{
 		HostCertMap:     map[string]string{"example.com": "./this.cert"},
 		HostEndpointMap: hostEndpointMap,
 	}
