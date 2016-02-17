@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -28,6 +29,11 @@ func emptyConfig() Config {
   - If no parameters given, it complains with usage message.
   - If 'init' parameter is given, it prints a 'config.json' file.
   - If <configFile> parameter is given, it reads the file and tries to act accordingly.
+  Exit codes:
+  0: All fine
+  1: Wrong usage
+  2: Problems reading file
+  3: Problems parsing JSON
 */
 func main() {
 	if len(os.Args) != 2 {
@@ -38,5 +44,20 @@ func main() {
 	if os.Args[1] == "init" {
 		json, _ := json.MarshalIndent(emptyConfig(), "", "  ")
 		fmt.Printf("%s\n", json)
+		os.Exit(0)
 	}
+	//Normal performance, start by reading+parsing the config:
+	data, err := ioutil.ReadFile(os.Args[1])
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	var config Config
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(3)
+	}
+	fmt.Println("Successfully parsed config.")
+	fmt.Printf("%+v\n", config)
 }
