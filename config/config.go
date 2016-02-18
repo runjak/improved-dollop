@@ -7,8 +7,9 @@ import (
 
 /* General structure of our configuration */
 type Config struct {
-	HostCertMap     map[string]string
-	HostEndpointMap map[string]Endpoint
+	CreateMissingCerts bool
+	HostCertMap        map[string]CertPaths
+	HostEndpointMap    map[string]Endpoint
 }
 
 /* Endpoint to connect to for a given domain name suffix */
@@ -17,13 +18,22 @@ type Endpoint struct {
 	Port string
 }
 
+/* Description of cert file locations */
+type CertPaths struct {
+	Certfile string
+	Keyfile  string
+}
+
 /* Function to produce an empty config map */
 func EmptyConfig() *Config {
+	hostCertMap := make(map[string]CertPaths)
+	hostCertMap["example.com"] = CertPaths{Certfile: "./example.com.cert.pem", Keyfile: "./example.com.key.pem"}
 	hostEndpointMap := make(map[string]Endpoint)
 	hostEndpointMap["example.com"] = Endpoint{Addr: "127.0.0.1", Port: "8080"}
 	return &Config{
-		HostCertMap:     map[string]string{"example.com": "./this.cert"},
-		HostEndpointMap: hostEndpointMap,
+		CreateMissingCerts: true,
+		HostCertMap:        hostCertMap,
+		HostEndpointMap:    hostEndpointMap,
 	}
 }
 
