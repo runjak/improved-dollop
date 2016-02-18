@@ -2,11 +2,10 @@ package config
 
 import (
 	"fmt"
-	"math/rand"
+	"github.com/runjak/improved-dollop/util"
 	"os"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestJson(t *testing.T) {
@@ -22,18 +21,7 @@ func TestJson(t *testing.T) {
 }
 
 func TestReadWrite(t *testing.T) {
-	//Building a random path:
-	//https://stackoverflow.com/a/31832326/448591
-	rand.Seed(time.Now().UnixNano())
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	randStringRunes := func(n int) string {
-		b := make([]rune, n)
-		for i := range b {
-			b[i] = letterRunes[rand.Intn(len(letterRunes))]
-		}
-		return string(b)
-	}
-	path := "/tmp/" + randStringRunes(16) + ".json"
+	path := "/tmp/" + util.RandString(16) + ".json"
 	//Testing if ReadFile(WriteFile(…)) works:
 	fmt.Printf("Creating random file: %s\n", path)
 	config1 := EmptyConfig()
