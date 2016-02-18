@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/runjak/improved-dollop/config"
 	"os"
@@ -17,19 +18,20 @@ import (
   2: Problems reading/parsing file
 */
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Printf("Usage:\t%v [init|<configFile>]\nSource:\thttps://github.com/runjak/improved-dollop\n", os.Args[0])
-		os.Exit(1)
-	}
+	//Flags to use:
+	init := flag.Bool("init", false, "Set this flag to print the default config.")
+	path := flag.String("config", "config.json", "Use this flag to specify a config file.")
+	flag.Parse()
 	//Checking if init case is wanted:
-	if os.Args[1] == "init" {
+	if *init {
 		c := config.EmptyConfig()
 		fmt.Printf("%s\n", c.ToJson())
 		os.Exit(0)
 	}
 	//Reading config file:
-	config, err := config.ReadFile(os.Args[1])
+	config, err := config.ReadFile(*path)
 	if err != nil {
+		fmt.Printf("Error reading/parsing config file '%s':\n", *path)
 		fmt.Println(err)
 		os.Exit(2)
 	}
